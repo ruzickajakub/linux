@@ -1618,8 +1618,10 @@ static int check_memory_region_flags(struct kvm *kvm,
 		valid_flags |= KVM_MEM_GUEST_MEMFD;
 
 	/* Dirty logging private memory is not currently supported. */
+	/*
 	if (mem->flags & KVM_MEM_GUEST_MEMFD)
 		valid_flags &= ~KVM_MEM_LOG_DIRTY_PAGES;
+        */
 
 	/*
 	 * GUEST_MEMFD is incompatible with read-only memslots, as writes to
@@ -1948,6 +1950,7 @@ static int kvm_set_memslot(struct kvm *kvm,
 		invalid_slot = kzalloc(sizeof(*invalid_slot), GFP_KERNEL_ACCOUNT);
 		if (!invalid_slot) {
 			mutex_unlock(&kvm->slots_arch_lock);
+			pr_warn_ratelimited("KUBA: kvm_set_memslot 1");
 			return -ENOMEM;
 		}
 		kvm_invalidate_memslot(kvm, old, invalid_slot);
@@ -2096,8 +2099,10 @@ int __kvm_set_memory_region(struct kvm *kvm,
 			return -EINVAL;
 	} else { /* Modify an existing slot. */
 		/* Private memslots are immutable, they can only be deleted. */
+		/*
 		if (mem->flags & KVM_MEM_GUEST_MEMFD)
 			return -EINVAL;
+		*/
 		if ((mem->userspace_addr != old->userspace_addr) ||
 		    (npages != old->npages) ||
 		    ((mem->flags ^ old->flags) & KVM_MEM_READONLY))

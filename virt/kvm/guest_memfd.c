@@ -496,11 +496,13 @@ int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
 	start = offset >> PAGE_SHIFT;
 	end = start + slot->npages;
 
+	/*
 	if (!xa_empty(&gmem->bindings) &&
 	    xa_find(&gmem->bindings, &start, end - 1, XA_PRESENT)) {
 		filemap_invalidate_unlock(inode->i_mapping);
 		goto err;
 	}
+	*/
 
 	/*
 	 * No synchronize_rcu() needed, any in-flight readers are guaranteed to
